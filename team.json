@@ -1,0 +1,28 @@
+{
+  "team_number": "T0035",
+  "group_lead": {
+    "name": "Akshat Tripathi",
+    "enrollment_no": "YOUR_ENROLLMENT_NUMBER",
+    "github": "SirTripathiJi"
+  },
+  "members": [
+    {
+      "name": "Bhavya Bansal",
+      "enrollment_no": "ENROLLMENT_NUMBER",
+      "github": "GITHUB_USERNAME"
+    },
+    {
+      "name": "Shivansh Boora",
+      "enrollment_no": "ENROLLMENT_NUMBER",
+      "github": "GITHUB_USERNAME"
+    },
+    {
+      "name": "Parag Garg",
+      "enrollment_no": "ENROLLMENT_NUMBER",
+      "github": "GITHUB_USERNAME"
+    }
+  ],
+  "postgres_version": "18.3",
+  "laptop_used_for_benchmarks": "MacBook Pro M4 Pro"
+}
+
