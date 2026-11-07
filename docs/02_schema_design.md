@@ -1038,3 +1038,78 @@ After the schema design is reviewed and finalized, implementation will proceed i
 7. Establish baseline query performance before introducing additional workload-specific indexes or query rewrites in the optimization phase.
 
 The schema design is therefore the foundation for the next implementation stage. It will be treated as complete only when the SQL implementation successfully loads the supplied records and reproduces the documented integrity checks.
+
+
+---
+
+### 16. Actual PostgreSQL Implementation and Validation Results
+
+#### 16.1 Environment
+
+The database schema was implemented and tested using:
+
+- Database: PostgreSQL
+- PostgreSQL client: 18.3
+- PostgreSQL server: 18.6 (Postgres.app)
+- Database schema: `practo`
+
+#### 16.2 Schema Creation
+
+The SQL script `sql/01_schema.sql` was executed successfully.
+
+**Implementation results:**
+
+- Created the `practo` schema.
+- Created all 11 database tables.
+- Created the partial unique index for primary doctor specialization.
+- Verified all 11 tables using PostgreSQL's `\dt practo.*` command.
+- No SQL execution errors were reported.
+
+#### 16.3 CSV Data Loading
+
+The script `sql/02_load_data.sql` was executed successfully.
+
+All 11 CSV files were imported using PostgreSQL `\copy` commands in parent-to-child dependency order.
+
+| Table | Expected records | Imported records |
+|---|---:|---:|
+| cities | 10 | 10 |
+| specializations | 15 | 15 |
+| doctors | 3,000 | 3,000 |
+| clinics | 1,500 | 1,500 |
+| doctor_specializations | 3,700 | 3,700 |
+| doctor_schedules | 30,499 | 30,499 |
+| patients | 40,000 | 40,000 |
+| appointments | 150,000 | 150,000 |
+| prescriptions | 97,234 | 97,234 |
+| prescription_items | 243,085 | 243,085 |
+| doctor_reviews | 30,339 | 30,339 |
+| **Total** | **626,367** | **626,367** |
+
+The `ANALYZE` command was executed after data loading to update PostgreSQL table statistics.
+
+#### 16.4 Row-Count Verification
+
+A SQL query using `COUNT(*)` was executed against all 11 tables.
+
+**Result:** Every actual table count matched its corresponding expected CSV record count.
+
+Total verified records: **626,367**
+
+#### 16.5 Integrity Validation Results
+
+Three additional SQL integrity checks were executed.
+
+| Check | Validation result | Outcome |
+|---|---|---|
+| Primary specialization | 0 doctors without a primary specialization | PASS |
+| Appointment and clinic consistency | All 122,144 in-clinic appointments have clinic IDs; all 27,856 video appointments have NULL clinic IDs | PASS |
+| Appointment patient and doctor references | 0 missing patient references and 0 missing doctor references | PASS |
+
+#### 16.6 Implementation Conclusion
+
+The initial PostgreSQL implementation successfully created all 11 tables and imported all 626,367 source records.
+
+The expected and actual row counts matched across every table. All three executed integrity checks passed.
+
+The implementation establishes the baseline relational database for the next phase of the Practo project, including query execution and performance analysis.
